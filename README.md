@@ -41,7 +41,7 @@ import { cacheAdapterEnhancer, throttleAdapterEnhancer } from 'axios-extensions'
 const http = axios.create({
 	baseURL: '/',
 	headers: { 'Cache-Control': 'no-cache' },
-	adapter: throttleAdapterEnhancer(cacheAdapterEnhancer(axios.defaults.adapter))
+	adapter: throttleAdapterEnhancer(cacheAdapterEnhancer(axios.getAdapter(axios.defaults.adapter)))
 });
 ```
 
@@ -93,7 +93,7 @@ const http = axios.create({
 	baseURL: '/',
 	headers: { 'Cache-Control': 'no-cache' },
 	// cache will be enabled by default
-	adapter: cacheAdapterEnhancer(axios.defaults.adapter)
+	adapter: cacheAdapterEnhancer(axios.getAdapter(axios.defaults.adapter))
 });
 
 http.get('/users'); // make real http request
@@ -108,7 +108,7 @@ const http = axios.create({
 	baseURL: '/',
 	headers: { 'Cache-Control': 'no-cache' },
 	// disable the default cache and set the cache flag
-	adapter: cacheAdapterEnhancer(axios.defaults.adapter, { enabledByDefault: false, cacheFlag: 'useCache'})
+	adapter: cacheAdapterEnhancer(axios.getAdapter(axios.defaults.adapter), { enabledByDefault: false, cacheFlag: 'useCache'})
 });
 
 http.get('/users'); // default cache was disabled and then the real http request invoked 
@@ -142,7 +142,7 @@ const http = axios.create({
 	baseURL: '/',
 	headers: { 'Cache-Control': 'no-cache' },
 	// disable the default cache
-	adapter: cacheAdapterEnhancer(axios.defaults.adapter, { enabledByDefault: false })
+	adapter: cacheAdapterEnhancer(axios.getAdapter(axios.defaults.adapter), { enabledByDefault: false })
 });
 
 http.get('/users', { cache: true }); // make the request cacheable(real http request made due to first request invoke)
@@ -181,7 +181,7 @@ Basically we recommend using the `throttleAdapterEnhancer` with `cacheAdapterEnh
 Note that POST and other methods besides GET are not affected. 
 
 ```js
-throttleAdapterEnhancer(cacheAdapterEnhancer(axios.defaults.adapter))
+throttleAdapterEnhancer(cacheAdapterEnhancer(axios.getAdapter(axios.defaults.adapter)))
 ```
 
 Check [David Corbacho's article](https://css-tricks.com/debouncing-throttling-explained-examples/) to learn more details about throttle and how it differs from debounce.
@@ -195,7 +195,7 @@ import { throttleAdapterEnhancer } from 'axios-extensions';
 const http = axios.create({
 	baseURL: '/',
 	headers: { 'Cache-Control': 'no-cache' },
-	adapter: throttleAdapterEnhancer(axios.defaults.adapter, { threshold: 2 * 1000 })
+	adapter: throttleAdapterEnhancer(axios.getAdapter(axios.defaults.adapter), { threshold: 2 * 1000 })
 });
 
 http.get('/users'); // make real http request
@@ -229,7 +229,7 @@ import { retryAdapterEnhancer } from 'axios-extensions';
 const http = axios.create({
 	baseURL: '/',
 	headers: { 'Cache-Control': 'no-cache' },
-	adapter: retryAdapterEnhancer(axios.defaults.adapter)
+	adapter: retryAdapterEnhancer(axios.getAdapter(axios.defaults.adapter))
 });
 
 // this request will retry two times if it failed
